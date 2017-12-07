@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!--[if lte IE 8]>         <html class="lt-ie8" lang="fr"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="gt-ie8">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8" />
+
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+
+    <script type="text/javascript">
+        /*
+                                                		var _gaq = _gaq || [];
+                                                		_gaq.push(['_setAccount', 'UA-37104851-1']);
+                                                		_gaq.push(['_trackPageview']);
+
+                                                		(function() {
+                                                			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                                                			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                                                			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                                                		})();
+                                                		*/
+
+    </script>
+
+    <link rel="stylesheet" media="all" type="text/css" href="./assets/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="./assets/css/jquery.fancybox.css" media="screen" />
+    <!--[if lt IE 9]>
+			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+    <title>Toyota - Ecard</title>
+</head>
+
+<body>
+    <div id="wrapper">
+        <header id="header">
+            <h1><img src="./assets/img/logo.png" alt="Toyota" /></h1>
+        </header>
+
+
+        <div class="content">
+            <div class="personnalisation">
+                <label class="titre_content" for="name">UNE ANNÉE 2018 PLEINE D’ÉNERGIE</label>
+                <hr class="titre_sep" >
+
+                <p class="titre-form">ENVOYEZ VOS VŒUX POUR LES FÊTES DE FIN D’ANNÉE</p>
+                <form name="myform" id="myform" action="" method="post">
+                    <div class="clearfix">
+                        <div class="col-left">
+                            <input type="hidden" id="form_hash" name="form[hash]" class="hash" value="1510651303" />
+                            <input type="text" id="form_name" name="form[name]" required="required" placeholder="Vos nom &amp; prénom" class="name" value="" />
+                            <input type="text" id="form_title" name="form[title]" required="required" placeholder="Toyota vous souhaite ses meilleurs voeux !" disabled class="title" value="" />
+                            <textarea id="form_message" name="form[message]" required="required" placeholder="Veuillez saisir votre message ou sélectionnez l&#039;une de nos suggestions." class="txtarea"></textarea>
+                            <input type="text" id="form_author" name="form[author]" required="required" placeholder="Votre signature" class="author" value="" />
+                        </div>
+                        <div class="col-right">
+                            <!--h3 class="title">Nos suggestions de texte</h3-->
+                            <ul id="sug">
+                                <li>&#171;Nous vous souhaitons un très joyeux Noël. Cette année tendez l’oreille pour entendre le Père Noël passer, il a choisi l’Hybride.&#187;</li>
+                                <li>&#171;Nous vous souhaitons une très bonne année 2018. Cette année tenez vos bonnes résolutions : fumez moins, passez à l’Hybride. &#187;</li>
+                                <li>&#171;Nous vous souhaitons nos meilleurs vœux hybrides : Joyeux Noël et Bonne Année !&#187;</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <input type="hidden" id="form_action" name="form[action]" class="action" />
+                        <button type="submit" id="preview" class="send marge">Prévisualiser</button>
+                        <button type="submit" id="prepare" class="send marge">Envoyer</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <script src="./assets/js/jquery-1.8.2.min.js"></script>
+    <script src="./assets/js/jquery.fancybox.js"></script>
+    <script src="./assets/js/animation.js"></script>
+    <script src="./assets/js/common.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/store.js/1.3.7/store.min.js"></script>
+    <!--script src="./assets/js/snowstorm-min.js"></script>
+    <script>
+        snowStorm.snowColor = '#ffffff'; // blue-ish snow!?
+        snowStorm.flakesMaxActive = 96; // show more snow on screen at once
+        snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
+
+    </script-->
+    <script type="text/javascript">
+        if (localStorage.getItem("myCookie") === null) {
+            console.log("vide")
+
+        } else {
+            var json = JSON.parse(store.get('myCookie'));
+            console.log(json)
+            $('#form_title')[0].value = json.titre;
+            $('#form_message')[0].value = json.message;
+            $('#form_name')[0].value = json.nom;
+            $('#form_author')[0].value = json.auteur;
+        }
+        $("#myform").submit(function(e) {
+            return false;
+        });
+        $('#preview').click(function() {
+            var prenom = $('#form_name')[0].value
+            var titre = $('#form_title')[0].value
+            var monmessage = $('#form_message')[0].value
+            var auteur = $('#form_author')[0].value
+
+            store.set("myCookie", JSON.stringify({
+                nom: prenom,
+                titre: titre,
+                message: monmessage,
+                auteur: auteur
+            }));
+            setTimeout(function() {
+                window.location.href = "../preview/preview.html"
+            }, 1000);
+
+
+
+            //$('.action').attr('value',$(this).attr('name'));
+        });
+        $('#prepare').click(function() {
+
+            var prenom = $('#form_name')[0].value
+            var titre = $('#form_title')[0].value
+            var monmessage = $('#form_message')[0].value
+            var auteur = $('#form_author')[0].value
+
+            store.set("myCookie", JSON.stringify({
+                nom: prenom,
+                titre: titre,
+                message: monmessage,
+                auteur: auteur
+            }));
+            setTimeout(function() {
+                window.location.href = "../prepare/prepare.html"
+            }, 1000);
+
+
+
+
+            //$('.action').attr('value',$(this).attr('name'));
+        });
+
+    </script>
+</body>
+
+</html>
