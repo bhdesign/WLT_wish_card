@@ -496,7 +496,7 @@ form .file {
 }
 
 .content .personnalisation .col-right ul li.current {
-    border: 2px solid #35c4f5;
+    border: 2px solid #c5a45f;
 }
 
 .content .personnalisation .actions .send {
@@ -901,4 +901,46 @@ p.titre-form {
 .titre_sep {
     border: 1px solid #c5a45f;
     width: 450px;
+}
+
+
+/*//////////*/
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    .content .personnalisation .col-right {
+        width: 320px;
+    }
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+    form,
+    p,
+    ul,
+    li,
+    fieldset,
+    input {
+        margin-top: 0px;
+    }
+    .content .personnalisation form textarea{
+        height: 121px;
+    }
+    .content .personnalisation .col-left{
+            margin-left: 100px;
+    }
+    .content .personnalisation .col-right{
+        top:0px;
+    }
+    .content .personnalisation .titre_sep{
+        margin: 0 0 15px 0;
+    margin-left: 100px;
+    }
+    .content .personnalisation label.titre_content{
+         margin-right: 323px;
+    }
+    p.titre-form{
+        margin-right: 330px;
+    }
+    .content .actions{
+        margin-right: 320px;
+    }
 }

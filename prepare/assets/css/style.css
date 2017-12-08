@@ -61,7 +61,6 @@ body {
     background-color: #000000;
     background: #000000 url(../img/Background.jpg) center center fixed no-repeat;
     background-size: cover;
-    overflow: hidden;
 }
 
 #wrapper{
@@ -670,6 +669,7 @@ form .file{
 .file-button
 {
 	width: 232px;
+        font-size: 13px;
 	display: inline-block;
 	height: 40px;
 	overflow: hidden;
@@ -677,7 +677,7 @@ form .file{
 	background: #c5a45f;
 	border-radius: 20px;
 	padding: 0 ;
-	margin-left: 20px;
+	    margin-left: 10px;
 	line-height: 20px;
 	position: relative;
 	top: 15px;
@@ -686,7 +686,7 @@ form .file{
 }
 
 .file-button:before {
-	content: "Parcourir";
+	content: "importez votre fichier";
 	font-family: 'toyota_displaybold', Arial, Tahoma, sans-serif;
 	font-weight: bold;
 	font-style: normal;
@@ -730,6 +730,7 @@ form .file{
 	background-color: #c5a45f;
     color:white;
     border-width:0;
+    margin-left:70px;
 }
 
 img.chapeau {
@@ -781,4 +782,20 @@ label.titre-form {
 .titre_sep {
     border: 1px solid #c5a45f;
     width: 450px;
+}
+/*//////////*/
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    .content .personnalisation .col-right {
+        width: 320px;
+    }
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+    .content .personnalisation form{
+        margin-top:0;
+    }
+    .content form textarea{
+        height:90px;
+    }
 }

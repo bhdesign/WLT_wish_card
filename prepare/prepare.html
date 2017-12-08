@@ -9,53 +9,51 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"> </script>
-    <script src="assets/toyota2017-rf/js/xlsx.full.min.js"> </script>
-    <link rel="stylesheet" media="all" type="text/css" href="assets/toyota2017-rf/css/style.css" />
-    <link rel="stylesheet" type="text/css" href="assets/toyota2017-rf/css/jquery.fancybox.css" media="screen" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js">
+
+
+    </script>
+    <script src="assets/js/xlsx.full.min.js">
+
+
+    </script>
+    <link rel="stylesheet" media="all" type="text/css" href="assets/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/jquery.fancybox.css" media="screen" />
     <!--[if lt IE 9]>
 			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-    <style type="text/css">
-        body {
-            background-position-y: -80px;
-        }
-        
-        .content .personnalisation label.titre_content {
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
 
-    </style>
     <title>Toyota - Ecard</title>
 </head>
 
 <body>
     <div id="wrapper">
         <header id="header">
-            <h1><img src="assets/toyota2017-rf/img/logo.png" alt="Toyota" /></h1>
+            <h1><img src="assets/img/logo.png" alt="Toyota" /></h1>
         </header>
 
 
         <div class="content">
-           
+
             <div class="personnalisation">
-                 <label class="titre_content" for="name">UNE ANNÉE 2018 PLEINE D’ÉNERGIE</label>
-                <hr class="titre_sep" >
+                <label class="titre_content" for="name">UNE ANNÉE 2018 PLEINE D’ÉNERGIE</label>
+                <hr class="titre_sep">
                 <label class="titre-form" for="name">ENVOYEZ VOS VŒUX POUR LES FÊTES DE FIN D’ANNÉE</label>
                 <form action="" method="post" enctype="multipart/form-data">
                     <fieldset>
-                        <label for="name" >1- Renseignez vos coordonnées</label>
+                        <label for="name">1- Renseignez vos coordonnées</label>
                         <input type="email" id="form_email" name="form[email]" required="required" placeholder="Votre adresse e-mail" class="email" />
                         <div class="clearfix">
                             <label for="to" class="noleaf">2- Renseignez vos destinataires</label>
                             <div class="col-left">
                                 <textarea id="form_dest" name="form[dest]" required="required" placeholder="Renseignez vos adresses emails séparées par une virgule sans espace après la virgule." class="dest"></textarea>
-                                <label class="label_inline" for="upl">Ou importez votre fichier</label>
-                                <a class="fancybox" href="#help"><img src="./assets/toyota2017-rf/img/help.png" alt="Aide" /></a>
+                                <!--label class="label_inline" for="upl">Ou importez votre fichier</label-->
+
                                 <p class="file-button">
                                     <input type="file" id="form_list" name="form[list]" class="file" onChange="upload(event)" />
                                 </p>
+                                <a class="fancybox" href="#help"><img src="./assets/img/help.png" alt="Aide" /></a>
+                                <input class="space-top" type="submit" value="Valider" />
                                 <style type="text/css">
                                     form .file {
                                         display: inline !important;
@@ -64,7 +62,7 @@
                                 </style>
                             </div>
                         </div>
-                        <input class="space-top" type="submit" value="Valider" />
+
                     </fieldset>
                 </form>
             </div>
@@ -78,11 +76,10 @@
 
 
 
-    <script src="assets/toyota2017-rf/js/jquery-1.8.2.min.js"></script>
-    <script src="assets/toyota2017-rf/js/jquery.fancybox.js"></script>
-    <script src="assets/toyota2017-rf/js/animation.js"></script>
-    <script src="assets/toyota2017-rf/js/common.js"></script>
-    <script src="assets/toyota2017-rf/js/swfobject.js"></script>
+    <script src="assets/js/jquery-1.8.2.min.js"></script>
+    <script src="assets/js/jquery.fancybox.js"></script>
+    <script src="assets/js/animation.js"></script>
+    <script src="assets/js/common.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/store.js/1.3.7/store.min.js"></script>
     <script type="text/javascript">
         $("form").submit(function(e) {
@@ -189,47 +186,48 @@
             };
         }
         $(".space-top").click(function() {
+            if ($("#form_dest").val() != "" && $("#form_email").val() != "") {
+                var json = JSON.parse(store.get('myCookie'));
+                var str_json = JSON.stringify({
+                    form_email: $("#form_email").val(),
+                    form_dest: $("#form_dest").val(),
+                    titre: json.titre,
+                    message: json.message,
+                    auteur: json.auteur
+                });
 
-            var json = JSON.parse(store.get('myCookie'));
-            var str_json = JSON.stringify({
-                form_email: $("#form_email").val(),
-                form_dest: $("#form_dest").val(),
-                titre: json.titre,
-                message: json.message,
-                auteur: json.auteur
-            });
+                console.log(str_json)
+                var http = new XMLHttpRequest();
+                var url = "sengrid.php";
+                var formData = new FormData();
+                formData.append("json_string", str_json);
 
-            console.log(str_json)
-            var http = new XMLHttpRequest();
-            var url = "sengrid.php";
-            var formData = new FormData();
-            formData.append("json_string", str_json);
-
-            console.log(http);
-            http.onreadystatechange = function() { //Call a function when the state changes.
-                if (http.readyState == 4 && http.status == 200) {
-                    console.log(http.responseText);
-                    $("body").append('<div id="envoi" class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: block;"><div class="fancybox-wrap fancybox-desktop fancybox-type-inline fancybox-opened" tabindex="-1" style="width: 420px; height: auto; position: absolute; top: 311px; left: 746px; opacity: 1; overflow: visible;"><div class="fancybox-skin" style="padding: 30px; width: auto; height: auto;"><div class="fancybox-outer"><div class="fancybox-inner" style="overflow: auto; width: 360px; height: 160px;"><div id="help" style="display: block;"><h3><span>Merci</span></h3><p>Votre email est envoyé.</p></div></div></div><a title="Close" id="merci" class="fancybox-item fancybox-close" href="javascript:;">Fermer</a></div></div></div>')
-                    $("#merci").click(function() {
-                        $(this).parent().remove();
-                    })
-                    var http2 = new XMLHttpRequest();
-                    var url = "success.php";
-                    var formData2 = new FormData();
-                    formData2.append("json_string", str_json);
-                    http2.onreadystatechange = function() { //Call a function when the state changes.
-                        if (http2.readyState == 4 && http2.status == 200) {
-                            console.log(http2.responseText);
+                console.log(http);
+                http.onreadystatechange = function() { //Call a function when the state changes.
+                    if (http.readyState == 4 && http.status == 200) {
+                        console.log(http.responseText);
+                        $("body").append('<div id="envoi" class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: block;"><div class="fancybox-wrap fancybox-desktop fancybox-type-inline fancybox-opened" tabindex="-1" style="width: 420px; height: auto; position: absolute; top: 311px; left: 746px; opacity: 1; overflow: visible;"><div class="fancybox-skin" style="padding: 30px; width: auto; height: auto;"><div class="fancybox-outer"><div class="fancybox-inner" style="overflow: auto; width: 360px; height: 160px;"><div id="help" style="display: block;"><h3><span>Merci</span></h3><p>Votre email est envoyé.</p></div></div></div><a title="Close" id="merci" class="fancybox-item fancybox-close" href="javascript:;">Fermer</a></div></div></div>')
+                        $("#merci").click(function() {
+                            $(this).parent().remove();
+                        })
+                        var http2 = new XMLHttpRequest();
+                        var url = "success.php";
+                        var formData2 = new FormData();
+                        formData2.append("json_string", str_json);
+                        http2.onreadystatechange = function() { //Call a function when the state changes.
+                            if (http2.readyState == 4 && http2.status == 200) {
+                                console.log(http2.responseText);
+                            }
                         }
-                    }
-                    console.log(http.responseText);
-                    http2.open("POST", url, true);
-                    http2.send(formData2);
+                        console.log(http.responseText);
+                        http2.open("POST", url, true);
+                        http2.send(formData2);
 
+                    }
                 }
+                http.open("POST", url, true);
+                http.send(formData);
             }
-            http.open("POST", url, true);
-            http.send(formData);
         })
 
     </script>
