@@ -115,7 +115,6 @@ body {
     background-color: #000000;
     background: #000000 url(../img/Background.jpg) center center fixed no-repeat;
     background-size: cover;
-    
 }
 
 #wrapper {
@@ -896,7 +895,7 @@ p.titre-form {
 }
 
 #cache {
-position: fixed;
+    position: fixed;
     top: 0;
     background: black;
     width: 100%;
@@ -940,14 +939,23 @@ position: fixed;
     }
 }
 
-@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (orientation: landscape) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: landscape) {
     iframe {
         height: 370px;
     }
 }
 
-@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (orientation: portrait) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (orientation: portrait) {
     iframe {
         height: 760px;
+    }
+    #header {
+        transform: scale(2);
+    }
+    .topContent  {
+        transform: scale(2) translate(150px, 330px);
+    }
+    .actions{
+            transform: scale(2) translate(150px,530px);
     }
 }

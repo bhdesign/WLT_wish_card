@@ -53,7 +53,7 @@
                                     <input type="file" id="form_list" name="form[list]" class="file" onChange="upload(event)" />
                                 </p>
                                 <a class="fancybox" href="#help"><img src="./assets/img/help.png" alt="Aide" /></a>
-                                <input class="space-top" type="submit" value="Valider" />
+                                <input class="space-top"  value="Valider" readonly="readonly" />
                                 <style type="text/css">
                                     form .file {
                                         display: inline !important;
@@ -109,7 +109,7 @@
         }
 
         function upload(e) {
-
+            
             file = $('form input.file')[0].files[0];
 
             var input = e.target;
@@ -186,6 +186,7 @@
             };
         }
         $(".space-top").click(function() {
+            console.log("ok");
             if ($("#form_dest").val() != "" && $("#form_email").val() != "") {
                 var json = JSON.parse(store.get('myCookie'));
                 var str_json = JSON.stringify({
@@ -204,9 +205,9 @@
                 http.onreadystatechange = function() { //Call a function when the state changes.
                     if (http.readyState == 4 && http.status == 200) {
                         console.log(http.responseText);
-                        $("body").append('<div id="envoi" class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: block;"><div class="fancybox-wrap fancybox-desktop fancybox-type-inline fancybox-opened" tabindex="-1" style="width: 420px; height: auto; position: absolute; top: 311px; left: 746px; opacity: 1; overflow: visible;"><div class="fancybox-skin" style="padding: 30px; width: auto; height: auto;"><div class="fancybox-outer"><div class="fancybox-inner" style="overflow: auto; width: 360px; height: 160px;"><div id="help" style="display: block;"><h3><span>Merci</span></h3><p>Votre email est envoyé.</p></div></div></div><a title="Close" id="merci" class="fancybox-item fancybox-close" href="javascript:;">Fermer</a></div></div></div>')
+                       $("body").append('<div id="envoi" class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: flex;    justify-content: center;    align-items: center;"><div class="fancybox-wrap fancybox-desktop fancybox-type-inline fancybox-opened" tabindex="-1" style="width: 420px; height: auto;  opacity: 1; overflow: visible;"><div class="fancybox-skin" style="padding: 30px; width: auto; height: auto;"><div class="fancybox-outer"><div class="fancybox-inner" style="overflow: auto; width: 360px; height: 160px;"><div id="help" style="display: block;"><h3><span>Merci</span></h3><p>Votre email est envoyé.</p></div></div></div><a title="Close" id="merci" class="fancybox-item fancybox-close" href="javascript:;">Fermer</a></div></div></div>');
                         $("#merci").click(function() {
-                            $(this).parent().remove();
+                            $("#envoi").remove();
                         })
                         var http2 = new XMLHttpRequest();
                         var url2 = "success.php";

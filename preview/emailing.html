@@ -183,7 +183,7 @@
 </head>
 
 <body bgcolor="#EFEFEF !important" text="#808080" style="margin: 0px; ; -webkit-text-size-adjust:none; padding-top : 20px; padding-right : 20px; padding-bottom : 20px; padding-left : 20px;background-color : #EFEFEF !important; font-family : verdana; line-height : 1; font-size : 16px; color : #FFFFFF; padding : 0px; ">
-   
+
     <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
         <tbody>
             <tr>
@@ -356,14 +356,62 @@
 
         </tbody>
     </table>
-    
+
     <script>
-        var json = JSON.parse(store.get('myCookie'));
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+        var param1 = getUrlParameter('param1');
+        
+        param1=param1.replace(/\+/g, '%20');
+        param1=decodeURIComponent(param1);
+     
+        var param2 = getUrlParameter('param2');
+        if (param1.indexOf(",")) {
+            var monindex2 = param1.indexOf(",");
+
+        }
+        if (param1.indexOf(".")) {
+            var monindex = param1.indexOf(".");
+        }
+        if (param1.indexOf(":")) {
+            var monindex3 =param1.indexOf(":");
+        }
+
+        var monlength =param1.length;
+        
+        if (monindex == -1 && monindex2 == -1) {
+            var string1 = param1.substring(0, monindex3 + 1);
+            var string2 = param1.substring(monindex3 + 2, monlength);
+            $('#message').html(string1 + "<br>" + string2);
+        }
+        if (monindex3 == -1) {
+            var string1 = param1.substring(0, monindex + 1);
+            var string2 = param1.substring(monindex + 2, monindex2 + 1);
+            var string3 = param1.substring(monindex2 + 2, monlength);
+            $('#message').html(string1 + "<br>" + string2 + "<br>" + string3);
+        }
+        if (monindex3 < monindex2 && monindex3 > 0) {
+            var string1 = param1.substring(0, monindex + 1);
+            var string2 = param1.substring(monindex + 2, monindex3 + 1);
+            var string3 = param1.substring(monindex3 + 2, monlength);
+            $('#message').html(string1 + "<br>" + string2 + "<br>" + string3);
+
+        }
         
         
-        $('#message').html(json.message);
-        $('#auteur').html(json.auteur);
-        
+        $('#auteur').html(param2);
 
     </script>
 </body>

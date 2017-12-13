@@ -912,7 +912,42 @@ p.titre-form {
     }
 }
 
-@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px)and (orientation: portrait) {
+ form,
+    p,
+    ul,
+    li,
+    fieldset,
+    input {
+        margin-top: 0px;
+    }
+    .content .personnalisation form textarea{
+        height: 121px;
+    }
+    .content .personnalisation .col-left{
+               transform: scale(1.5) translate(10%,10%);
+    }
+    .content .personnalisation .col-right{
+        top:0px;
+         transform: scale(2) translate(-40%,110%);
+    }
+    .content .personnalisation .titre_sep{
+        margin: 0 0 15px 0;
+    margin-left: 260px;
+    }
+    .content .personnalisation label.titre_content{
+         margin-right: 0px;
+    }
+    p.titre-form{
+        margin-right: 0px;
+        margin-bottom: 80px;
+    }
+    .content .actions{
+       transform: scale(1.2) translate(40px,600px);
+    }
+    
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px)and (orientation: landscape) {
     form,
     p,
     ul,
@@ -925,10 +960,11 @@ p.titre-form {
         height: 121px;
     }
     .content .personnalisation .col-left{
-            margin-left: 100px;
+                margin-left: 80px;
     }
     .content .personnalisation .col-right{
         top:0px;
+           
     }
     .content .personnalisation .titre_sep{
         margin: 0 0 15px 0;
