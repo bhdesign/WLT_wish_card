@@ -67,6 +67,7 @@ zf.init = function(){
 	// });
 	zf.$txtarea=$(".txtarea");
 	$("#sug li").click(function(){
+       
 		zf.$txtarea.val($(this).text());
         console.log($(this).text());
 		$(this).addClass('current').siblings().removeClass('current');

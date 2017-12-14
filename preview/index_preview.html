@@ -359,39 +359,44 @@
 
     <script>
         var json = JSON.parse(store.get('myCookie'));
-        if (json.message.indexOf(",")) {
-            var monindex2 = json.message.indexOf(",");
+        var perso = json.personel;
+        console.log(perso+"  "+json.message);
+        if (perso) {
+            $('#message').html(json.message.replace(/\r?\n/g, '<br />'));
+        } else {
+            if (json.message.indexOf(",")) {
+                var monindex2 = json.message.indexOf(",");
 
-        }
-        if (json.message.indexOf(".")) {
-            var monindex = json.message.indexOf(".");
-        }
-        if (json.message.indexOf(":")) {
-            var monindex3 = json.message.indexOf(":");
-        }
+            }
+            if (json.message.indexOf(".")) {
+                var monindex = json.message.indexOf(".");
+            }
+            if (json.message.indexOf(":")) {
+                var monindex3 = json.message.indexOf(":");
+            }
 
-        var monlength = json.message.length;
+            var monlength = json.message.length;
 
-        console.log(monindex + " " + monindex2 + " " + monindex3)
-        if (monindex == -1 && monindex2 == -1) {
-            var string1 = json.message.substring(0, monindex3 + 1);
-            var string2 = json.message.substring(monindex3 + 2, monlength);
-            $('#message').html(string1 + "<br>" + string2);
-        }
-        if (monindex3 == -1) {
-            var string1 = json.message.substring(0, monindex + 1);
-            var string2 = json.message.substring(monindex + 2, monindex2 + 1);
-            var string3 = json.message.substring(monindex2 + 2, monlength);
-            $('#message').html(string1 + "<br>" + string2 + "<br>" + string3);
-        }
-        if (monindex3 < monindex2 && monindex3>0) {
-            var string1 = json.message.substring(0, monindex + 1);
-            var string2 = json.message.substring(monindex + 2, monindex3 + 1);
-            var string3 = json.message.substring(monindex3 + 2, monlength);
-            $('#message').html(string1 + "<br>" + string2 + "<br>" + string3);
+            console.log(monindex + " " + monindex2 + " " + monindex3)
+            if (monindex == -1 && monindex2 == -1) {
+                var string1 = json.message.substring(0, monindex3 + 1);
+                var string2 = json.message.substring(monindex3 + 2, monlength);
+                $('#message').html(string1 + "<br>" + string2);
+            }
+            if (monindex3 == -1) {
+                var string1 = json.message.substring(0, monindex + 1);
+                var string2 = json.message.substring(monindex + 2, monindex2 + 1);
+                var string3 = json.message.substring(monindex2 + 2, monlength);
+                $('#message').html(string1 + "<br>" + string2 + "<br>" + string3);
+            }
+            if (monindex3 < monindex2 && monindex3 > 0) {
+                var string1 = json.message.substring(0, monindex + 1);
+                var string2 = json.message.substring(monindex + 2, monindex3 + 1);
+                var string3 = json.message.substring(monindex3 + 2, monlength);
+                $('#message').html(string1 + "<br>" + string2 + "<br>" + string3);
 
+            }
         }
-
         $('#auteur').html(json.auteur);
 
     </script>

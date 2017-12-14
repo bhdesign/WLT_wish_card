@@ -13,16 +13,16 @@
 
     <script type="text/javascript">
         /*
-                                                                		var _gaq = _gaq || [];
-                                                                		_gaq.push(['_setAccount', 'UA-37104851-1']);
-                                                                		_gaq.push(['_trackPageview']);
+                                                                                                                                                                        		var _gaq = _gaq || [];
+                                                                                                                                                                        		_gaq.push(['_setAccount', 'UA-37104851-1']);
+                                                                                                                                                                        		_gaq.push(['_trackPageview']);
 
-                                                                		(function() {
-                                                                			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                                                                			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                                                                			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                                                                		})();
-                                                                		*/
+                                                                                                                                                                        		(function() {
+                                                                                                                                                                        			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                                                                                                                                                                        			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                                                                                                                                                                        			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                                                                                                                                                                        		})();
+                                                                                                                                                                        		*/
 
     </script>
 
@@ -91,28 +91,42 @@
         snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
 
     </script-->
-   
+
     <script type="text/javascript">
+        var perso = false;
+        $('#form_message').focus(function() {
+            perso = true;
+        });
         if (localStorage.getItem("myCookie") === null) {
             console.log("vide")
 
         } else {
             var json = JSON.parse(store.get('myCookie'));
-            console.log($('#form_title')[0].value)
+            perso = json.personel;
             $('#form_title')[0].value = json.titre;
-            $('#form_message')[0].value = "«" + json.message + "»";
+            $('#form_message')[0].value = json.message.split("<br/>").join("\n");
             $('#form_name')[0].value = json.nom;
             $('#form_author')[0].value = json.auteur;
         }
         $("#myform").submit(function(e) {
             return false;
         });
-        console.log($('#form_message')[0].value.replace($('#form_message')[0].value.split(" ")[$('#form_message')[0].value.split(" ").length - 1], " "))
+        //console.log($('#form_message')[0].value.replace($('#form_message')[0].value.split(" ")[$('#form_message')[0].value.split(" ").length - 1], " "))
 
         $('#preview').click(function() {
-            var messageTextArea = $('#form_message')[0].value
-            messageTextArea = $('#form_message')[0].value.replace($('#form_message')[0].value.split(" ")[0], " ");
-            messageTextArea = messageTextArea.replace($('#form_message')[0].value.split(" ")[$('#form_message')[0].value.split(" ").length - 1], " ");
+
+            var messageTextArea = $('#form_message').val();
+            console.log(messageTextArea)
+            if (messageTextArea.includes("«")) messageTextArea = $('#form_message')[0].value.replace($('#form_message')[0].value.split(" ")[0], " ");
+            if (messageTextArea.includes("»")) messageTextArea = messageTextArea.replace($('#form_message')[0].value.split(" ")[$('#form_message')[0].value.split(" ").length - 1], " ");
+            if (perso) {
+                messageTextArea = $('#form_message').val().replace(/\n/g, "<br/>");
+            };
+
+
+
+
+
             var prenom = $('#form_name')[0].value;
             var titre = $('#form_title')[0].value;
             var monmessage = messageTextArea;
@@ -121,7 +135,8 @@
                 nom: prenom,
                 titre: titre,
                 message: monmessage,
-                auteur: auteur
+                auteur: auteur,
+                personel: perso
             }));
             setTimeout(function() {
                 window.location.href = "../preview/preview.html"
@@ -132,34 +147,36 @@
             //$('.action').attr('value',$(this).attr('name'));
         });
         $('#prepare').click(function() {
-            var messageTextArea = $('#form_message')[0].value
-            messageTextArea = $('#form_message')[0].value.replace($('#form_message')[0].value.split(" ")[0], " ");
-            messageTextArea = messageTextArea.replace($('#form_message')[0].value.split(" ")[$('#form_message')[0].value.split(" ").length - 1], " ");
-            $('#form_message')[0].value = $('#form_message')[0].value.replace($('#form_message')[0].value.split(" ")[0], " ");
-            $('#form_message')[0].value = $('#form_message')[0].value.replace($('#form_message')[0].value.split(" ")[$('#form_message')[0].value.split(" ").length - 1], " ");
-            var prenom = $('#form_name')[0].value;
-            var titre = $('#form_title')[0].value;
-            var monmessage = messageTextArea;
-            var auteur = $('#form_author')[0].value;
+            if ($("#form_author").val() != "" && $("#form_name").val() != "" && $("#form_message").val() != "") {
 
-            store.set("myCookie", JSON.stringify({
-                nom: prenom,
-                titre: titre,
-                message: monmessage,
-                auteur: auteur
-            }));
-            setTimeout(function() {
-                window.location.href = "../prepare/prepare.html"
-            }, 1000);
+                var messageTextArea = $('#form_message')[0].value
+                if (messageTextArea.includes("«")) messageTextArea = $('#form_message')[0].value.replace($('#form_message')[0].value.split(" ")[0], " ");
+                if (messageTextArea.includes("»")) messageTextArea = messageTextArea.replace($('#form_message')[0].value.split(" ")[$('#form_message')[0].value.split(" ").length - 1], " ");
+                if (perso) {
+                    messageTextArea = $('#form_message').val().replace(/\n/g, "<br/>");
+                };
+                var prenom = $('#form_name')[0].value;
+                var titre = $('#form_title')[0].value;
+                var monmessage = messageTextArea;
+                var auteur = $('#form_author')[0].value;
 
+                store.set("myCookie", JSON.stringify({
+                    nom: prenom,
+                    titre: titre,
+                    message: monmessage,
+                    auteur: auteur
+                }));
+                setTimeout(function() {
+                    window.location.href = "../prepare/prepare.html"
+                }, 1000);
+            } else {
+                alert("Veuillez remplir les champs")
+            }
 
-
-
-            //$('.action').attr('value',$(this).attr('name'));
         });
 
     </script>
-     <script src="./assets/js/cookiechoices.js"></script>
+    <script src="./assets/js/cookiechoices.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function(event) {
             cookieChoices.showCookieConsentDialog('Ce site utilise des cookies pour vous offrir le meilleur service. En poursuivant votre navigation, vous acceptez l\’utilisation des cookies.',
