@@ -585,7 +585,7 @@ form .file {
     border: 1px solid #8d8d8d;
     padding: 10px 15px;
     color: #000;
-    font-size: 13px;
+    font-size: 12px;
     font-family: Verdana, Arial, sans-serif;
     display: inline-block;
 }
@@ -596,7 +596,7 @@ form .file {
     padding: 15px 15px;
     height: 130px;
     color: #000;
-    font-size: 13px;
+    font-size: 12px;
     font-family: Verdana, Arial, sans-serif;
 }
 

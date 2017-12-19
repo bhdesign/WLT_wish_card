@@ -13,16 +13,16 @@
 
     <script type="text/javascript">
         /*
-                                                                                                                                                                        		var _gaq = _gaq || [];
-                                                                                                                                                                        		_gaq.push(['_setAccount', 'UA-37104851-1']);
-                                                                                                                                                                        		_gaq.push(['_trackPageview']);
+                                                                                                                                                                                                		var _gaq = _gaq || [];
+                                                                                                                                                                                                		_gaq.push(['_setAccount', 'UA-37104851-1']);
+                                                                                                                                                                                                		_gaq.push(['_trackPageview']);
 
-                                                                                                                                                                        		(function() {
-                                                                                                                                                                        			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                                                                                                                                                                        			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                                                                                                                                                                        			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                                                                                                                                                                        		})();
-                                                                                                                                                                        		*/
+                                                                                                                                                                                                		(function() {
+                                                                                                                                                                                                			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                                                                                                                                                                                                			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                                                                                                                                                                                                			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                                                                                                                                                                                                		})();
+                                                                                                                                                                                                		*/
 
     </script>
 
@@ -31,6 +31,12 @@
     <!--[if lt IE 9]>
 			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
+    <style>
+        .error {
+            border-color: #e50000 !important;
+        }
+
+    </style>
     <title>Toyota - Ecard</title>
 </head>
 
@@ -50,25 +56,28 @@
                 <form name="myform" id="myform" action="" method="post">
                     <div class="clearfix">
                         <div class="col-left">
-                            <input type="hidden" id="form_hash" name="form[hash]" class="hash" value="1510651303" />
+
                             <input type="text" id="form_name" name="form[name]" required="required" placeholder="Vos nom &amp; prénom" class="name" value="" />
+                            <label id="champs1" class="content label" style="color:#e50000;display:none;">Merci de remplir ce champs.</label>
                             <input type="text" id="form_title" name="form[title]" required="required" placeholder="Toyota vous souhaite ses meilleurs voeux !" disabled class="title" value="Toyota vous souhaite ses meilleurs voeux !" />
                             <textarea id="form_message" name="form[message]" required="required" placeholder="Veuillez saisir votre message ou sélectionnez l&#039;une de nos suggestions." class="txtarea"></textarea>
+                            <label id="champs2" class="content label" style="color:#e50000;display:none;">Merci de remplir ce champs.</label>
                             <input type="text" id="form_author" name="form[author]" required="required" placeholder="Votre signature" class="author" value="" />
+                            <label id="champs3" class="content label" style="color:#e50000;display:none;">Merci de remplir ce champs.</label>
                         </div>
                         <div class="col-right">
                             <!--h3 class="title">Nos suggestions de texte</h3-->
                             <ul id="sug">
-                                <li>&#171; Nous vous souhaitons un très joyeux Noël. Cette année tendez l’oreille pour entendre le Père Noël passer, il a choisi l’Hybride. &#187;</li>
-                                <li>&#171; Nous vous souhaitons une très bonne année 2018. Cette année tenez vos bonnes résolutions : fumez moins, passez à l’Hybride. &#187;</li>
-                                <li>&#171; Nous vous souhaitons nos meilleurs vœux hybrides : Joyeux Noël et Bonne Année ! &#187;</li>
+                                <li>Nous vous souhaitons un très joyeux Noël. Cette année tendez l’oreille pour entendre le Père Noël passer, il a choisi l’Hybride.</li>
+                                <li>Nous vous souhaitons une très bonne année 2018. Cette année tenez vos bonnes résolutions : fumez moins, passez à l’Hybride.</li>
+                                <li>Nous vous souhaitons nos meilleurs vœux hybrides : Joyeux Noël et Bonne Année !</li>
                             </ul>
                         </div>
                     </div>
                     <div class="actions">
-                        <input type="hidden" id="form_action" name="form[action]" class="action" />
-                        <button type="submit" id="preview" class="send marge">Prévisualiser</button>
-                        <button type="submit" id="prepare" class="send marge">Envoyer</button>
+
+                        <div id="preview" class="send marge">Prévisualiser</div>
+                        <div id="prepare" class="send marge">Envoyer</div>
                     </div>
 
                 </form>
@@ -84,15 +93,27 @@
     <script src="./assets/js/animation.js"></script>
     <script src="./assets/js/common.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/store.js/1.3.7/store.min.js"></script>
-    <!--script src="./assets/js/snowstorm-min.js"></script>
+    <script src="./assets/js/snowstorm-min.js"></script>
     <script>
         snowStorm.snowColor = '#ffffff'; // blue-ish snow!?
         snowStorm.flakesMaxActive = 96; // show more snow on screen at once
         snowStorm.useTwinkleEffect = true; // let the snow flicker in and out of view
 
-    </script-->
+    </script>
 
     <script type="text/javascript">
+        $("#form_message").focus(function() {
+            $(this).removeClass("error");;
+            $("#champs2").hide();
+        });
+        $("#form_author").focus(function() {
+            $(this).removeClass("error");;
+            $("#champs3").hide();
+        });
+        $("#form_name").focus(function() {
+            $(this).removeClass("error");;
+            $("#champs1").hide();
+        });
         var perso = false;
         $('#form_message').focus(function() {
             perso = true;
@@ -111,38 +132,51 @@
         $("#myform").submit(function(e) {
             return false;
         });
+        $("#preview").submit(function(e) {
+            return false;
+        });
+        $("#prepare").submit(function(e) {
+            return false;
+        });
         //console.log($('#form_message')[0].value.replace($('#form_message')[0].value.split(" ")[$('#form_message')[0].value.split(" ").length - 1], " "))
 
         $('#preview').click(function() {
+            if ($("#form_author").val() != "" && $("#form_name").val() != "" && $("#form_message").val() != "") {
+                var messageTextArea = $('#form_message').val();
+                console.log(messageTextArea)
 
-            var messageTextArea = $('#form_message').val();
-            console.log(messageTextArea)
-            if (messageTextArea.includes("«")) messageTextArea = $('#form_message')[0].value.replace($('#form_message')[0].value.split(" ")[0], " ");
-            if (messageTextArea.includes("»")) messageTextArea = messageTextArea.replace($('#form_message')[0].value.split(" ")[$('#form_message')[0].value.split(" ").length - 1], " ");
-            if (perso) {
-                messageTextArea = $('#form_message').val().replace(/\n/g, "<br/>");
-            };
+                if (perso) {
+                    messageTextArea = $('#form_message').val().replace(/\n/g, "<br/>");
+                };
+                var prenom = $('#form_name')[0].value;
+                var titre = $('#form_title')[0].value;
+                var monmessage = messageTextArea;
+                var auteur = $('#form_author')[0].value;
+                store.set("myCookie", JSON.stringify({
+                    nom: prenom,
+                    titre: titre,
+                    message: monmessage,
+                    auteur: auteur,
+                    personel: perso
+                }));
+                setTimeout(function() {
+                    window.location.href = "../preview/index_preview.html"
+                }, 1000);
 
-
-
-
-
-            var prenom = $('#form_name')[0].value;
-            var titre = $('#form_title')[0].value;
-            var monmessage = messageTextArea;
-            var auteur = $('#form_author')[0].value;
-            store.set("myCookie", JSON.stringify({
-                nom: prenom,
-                titre: titre,
-                message: monmessage,
-                auteur: auteur,
-                personel: perso
-            }));
-            setTimeout(function() {
-                window.location.href = "../preview/preview.html"
-            }, 1000);
-
-
+            } else {
+                if ($("#form_author").val() == "") {
+                    $("#form_author").addClass("error");
+                    $("#champs3").show();
+                }
+                if ($("#form_name").val() == "") {
+                    $("#form_name").addClass("error");
+                    $("#champs1").show();
+                }
+                if ($("#form_message").val() == "") {
+                    $("#form_message").addClass("error");
+                    $("#champs2").show();
+                }
+            }
 
             //$('.action').attr('value',$(this).attr('name'));
         });
@@ -150,8 +184,7 @@
             if ($("#form_author").val() != "" && $("#form_name").val() != "" && $("#form_message").val() != "") {
 
                 var messageTextArea = $('#form_message')[0].value
-                if (messageTextArea.includes("«")) messageTextArea = $('#form_message')[0].value.replace($('#form_message')[0].value.split(" ")[0], " ");
-                if (messageTextArea.includes("»")) messageTextArea = messageTextArea.replace($('#form_message')[0].value.split(" ")[$('#form_message')[0].value.split(" ").length - 1], " ");
+
                 if (perso) {
                     messageTextArea = $('#form_message').val().replace(/\n/g, "<br/>");
                 };
@@ -170,20 +203,24 @@
                     window.location.href = "../prepare/prepare.html"
                 }, 1000);
             } else {
-                alert("Veuillez remplir les champs")
+                if ($("#form_author").val() == "") {
+                    $("#form_author").addClass("error");
+                    $("#champs3").show();
+                }
+                if ($("#form_name").val() == "") {
+                    $("#form_name").addClass("error");
+                    $("#champs1").show();
+                }
+                if ($("#form_message").val() == "") {
+                    $("#form_message").addClass("error");
+                    $("#champs2").show();
+                }
             }
 
         });
 
     </script>
-    <script src="./assets/js/cookiechoices.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function(event) {
-            cookieChoices.showCookieConsentDialog('Ce site utilise des cookies pour vous offrir le meilleur service. En poursuivant votre navigation, vous acceptez l\’utilisation des cookies.',
-                'Fermer', 'En savoir plus', 'https://www.toyota.fr/#/publish/pageoverlayer_open/url=%2Fsys%2Fe-privacy%2Fsettings/ajax=true');
-        });
 
-    </script>
 </body>
 
 </html>

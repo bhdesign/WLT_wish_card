@@ -9,20 +9,40 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js">
-
-
-    </script>
-    <script src="assets/js/xlsx.full.min.js">
-
-
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+    <script src="assets/js/xlsx.full.min.js"></script>
     <link rel="stylesheet" media="all" type="text/css" href="assets/css/style.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/jquery.fancybox.css" media="screen" />
     <!--[if lt IE 9]>
 			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
+    <style>
+        .error {
+            border-color: #e50000 !important;
+        }
 
+    </style>
+    <script>
+        if (FileReader.prototype.readAsBinaryString === undefined) {
+            FileReader.prototype.readAsBinaryString = function(fileData) {
+                var binary = "";
+                var pt = this;
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var bytes = new Uint8Array(reader.result);
+                    var length = bytes.byteLength;
+                    for (var i = 0; i < length; i++) {
+                        binary += String.fromCharCode(bytes[i]);
+                    }
+                    //pt.result  - readonly so assign content to another property
+                    pt.content = binary;
+                    pt.onload(); // thanks to @Denis comment
+                }
+                reader.readAsArrayBuffer(fileData);
+            }
+        }
+
+    </script>
     <title>Toyota - Ecard</title>
 </head>
 
@@ -43,10 +63,12 @@
                     <fieldset>
                         <label for="name">1- Renseignez vos coordonnées</label>
                         <input type="email" id="form_email" name="form[email]" required="required" placeholder="Votre adresse e-mail" class="email" />
+                        <label id="champs1" class="content label" style="color:#e50000;display:none;">L'adresse email n'est pas conforme.</label>
                         <div class="clearfix">
                             <label for="to" class="noleaf">2- Renseignez vos destinataires</label>
                             <div class="col-left">
                                 <textarea id="form_dest" name="form[dest]" required="required" placeholder="Renseignez vos adresses emails séparées par une virgule sans espace après la virgule." class="dest"></textarea>
+                                <label id="champs2" class="content label" style="color:#e50000;display:none;">Le champs comporte des erreurs ou est vide.</label>
                                 <!--label class="label_inline" for="upl">Ou importez votre fichier</label-->
 
                                 <p class="file-button">
@@ -82,14 +104,168 @@
     <script src="assets/js/common.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/store.js/1.3.7/store.min.js"></script>
     <script type="text/javascript">
+        $("#form_dest").focus(function() {
+            $(this).removeClass("error");;
+            $("#champs2").hide();
+        });
+        $("#form_email").focus(function() {
+            $(this).removeClass("error");;
+            $("#champs1").hide();
+        });
+
+        var valid_email = false;
+        var valid_email2 = false;
         $("form").submit(function(e) {
             return false;
         });
+        $("body").append('<div id="envoi" class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: block; "><div class="fancybox-wrap fancybox-desktop fancybox-type-inline fancybox-opened" tabindex="-1" style="width: 420px; height: auto;  opacity: 1; overflow: visible;  position: absolute;  left: 40%;top: 30%;"><div class="fancybox-skin" style="padding: 30px; width: auto; height: auto;"><div class="fancybox-outer"><div class="fancybox-inner" style="overflow: auto; width: 360px; height: 160px;"><div id="help" style="display: block;"><h3><span>Merci</span></h3><p>Votre email est envoyé.</p></div></div></div><a title="Close" id="merci" class="fancybox-item fancybox-close" href="http://theandpartnership.rf.gd/wish_card_v5/write/write.html">Envoyer une autre carte de voeux</a><a class="fancybox-item fancybox-close" href="javascript:recup()">RÉCUPÉRER LES ADRESSES ERRONÉES</a></div></div></div>');
+        $("body").append('<div id="envoi2" class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: block;    "><div class="fancybox-wrap fancybox-desktop fancybox-type-inline fancybox-opened" tabindex="-1" style="width: 420px; height: auto;  opacity: 1; overflow: visible;position: absolute;  left: 40%;top: 30%;"><div class="fancybox-skin" style="padding: 30px; width: auto; height: auto;"><div class="fancybox-outer"><div class="fancybox-inner" style="overflow: auto; width: 360px; height: 160px;"><div id="help" style="display: block;"><h3><span>Merci</span></h3><p>Votre email est envoyé.</p></div></div></div><a title="Close" id="merci" class="fancybox-item fancybox-close" href="http://theandpartnership.rf.gd/wish_card_v5/write/write.html">Envoyer une autre carte de voeux</a></div></div></div>');
+        $("#envoi").hide();
+        $("#envoi2").hide();
+        var adress_erron = new Array();
+
+        function convertArrayOfObjectsToCSV(args) {
+            var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+            data = args.data || null;
+            if (data == null || !data.length) {
+                return null;
+            }
+
+            columnDelimiter = args.columnDelimiter || ',';
+            lineDelimiter = args.lineDelimiter || '\n';
+
+            keys = Object.keys(data[0]);
+
+            result = '';
+            result += keys.join(columnDelimiter);
+            result += lineDelimiter;
+
+            data.forEach(function(item) {
+                ctr = 0;
+                keys.forEach(function(key) {
+                    if (ctr > 0) result += columnDelimiter;
+
+                    result += item[key];
+                    ctr++;
+                });
+                result += lineDelimiter;
+            });
+
+            return result;
+        }
+
+        function downloadCSV() {
+            window.URL = window.URL || window.webkitURL;
+            var data, filename, link;
+            var csv = convertArrayOfObjectsToCSV({
+                data: adress_erron
+            });
+            if (csv == null)
+                return;
+
+            filename = 'export.csv';
+            //                        var blobi = new Blob([new Uint8Array(csv)], {
+            //                            type: "octet/stream"
+            //                        });
+            var blobi = new Blob([csv], {
+                type: "text/csv;charset=utf-8;"
+            });
+            console.log(blobi);
+
+            if (navigator.msSaveBlob) { // IE 10+
+                navigator.msSaveBlob(blobi, filename)
+            } else {
+                var link = document.createElement("a");
+
+                console.log(blobi);
+                // feature detection, Browsers that support HTML5 download attribute
+                var url = window.URL.createObjectURL(blobi);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style = "visibility:hidden";
+                document.body.appendChild(link);
+                setTimeout(function() {
+                    link.click();
+                    document.body.removeChild(link);
+                }, 1000);
+
+
+
+            }
+        }
+
+
+        function recup() {
+            // Example data given in question text
+            //console.log(adress_erron)
+
+            // Building the CSV from the Data two-dimensional array
+            // Each column is separated by ";" and new line "\n" for next row
+            var csvContent = '';
+            adress_erron.forEach(function(infoArray, index) {
+
+                if (infoArray == "espace vide") {
+                    dataString = "Champs vide;";
+                } else {
+                    dataString = infoArray.v + ';';
+
+                }
+                csvContent += index < adress_erron.length ? dataString + '\n' : dataString;
+            });
+
+            // The download function takes a CSV string, the filename and mimeType as parameters
+            // Scroll/look down at the bottom of this snippet to see how download is called
+            var download = function(content, fileName, mimeType) {
+                var a = document.createElement('a');
+                mimeType = mimeType || 'application/octet-stream';
+
+                if (navigator.msSaveBlob) { // IE10
+                    navigator.msSaveBlob(new Blob([content], {
+                        type: mimeType
+                    }), fileName);
+                } else if (URL && 'download' in a) { //html5 A[download]
+                    a.href = URL.createObjectURL(new Blob([content], {
+                        type: mimeType
+                    }));
+                    a.setAttribute('href', 'data:application/octet-stream,' + encodeURIComponent(content));
+                    a.setAttribute('target', '_blank');
+                    a.setAttribute('download', fileName);
+                    document.body.appendChild(a);
+                    setTimeout(function() {
+                        a.click();
+                        document.body.removeChild(a);
+                    }, 1000);
+
+                } else {
+                    location.href = 'data:application/octet-stream,' + encodeURIComponent(content); // only this mime type is supported
+                }
+            };
+            //console.log(csvContent);
+            download(csvContent, 'erreur.csv', 'text/csv');
+        }
+
+        function ValidateEmails() {
+            var emailList = $("#form_dest").val().split(',');
+            console.log(emailList);
+            for (i = 0; i < emailList.length; i++) {
+                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                var mavalidation = regex.test(emailList[i]);
+                valid_email = mavalidation;
+            }
+        };
+
+        function ValidateEmails2() {
+            var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            var mavalidation = regex.test($("#form_email").val());
+            valid_email2 = mavalidation;
+
+        };
         var mail_valide;
         var mailOK = false;
 
         function ValidateEmail(mail) {
-            console.log(mail);
+
             var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (re.test(mail)) {
                 mail_valide = mail;
@@ -103,9 +279,35 @@
         var file;
         var XL_file = true;
         var duplic = new Array();
+        var Unique = new Array()
 
         function uniq(a) {
-            return Array.from(new Set(a));
+            if (!Array.prototype.unique) {
+                Array.prototype.unique = function() {
+
+                    var nArr = [],
+                        oLen = this.length,
+                        dup, x, y;
+
+                    for (x = 0; x < oLen; x++) {
+                        dup = undefined;
+
+                        for (y = 0; y < nArr.length; y++) {
+                            if (this[x] === nArr[y]) {
+                                dup = 1;
+                                break;
+                            }
+                        }
+
+                        if (!dup) {
+                            nArr.push(this[x]);
+                        }
+                    }
+                    console.log(nArr);
+                    return nArr;
+                };
+            };
+            return a.unique();
         }
 
         function upload(e) {
@@ -114,9 +316,14 @@
 
             var input = e.target;
             var reader = new FileReader();
+            var nb_error = 0;
+            reader.onload = function(e) {
+                if (!e) {
+                    var fileData = reader.content;
+                } else {
+                    var fileData = reader.result;
+                }
 
-            reader.onload = function() {
-                var fileData = reader.result;
                 var wb = XLSX.read(fileData, {
                     type: 'binary'
                 });
@@ -131,34 +338,39 @@
                         console.log(i)
                         if (wb.Sheets[sheetName]['A' + i] === undefined) {
                             console.log("erreur");
-                            $("#form_dest").val("ERREUR: Vérifiez vos adresses email dans le fichier Excel à la ligne" + i);
-                            e.target.value = "";
-                            break;
+                            var vide = "espace vide";
+                            //$("#form_dest").val("ERREUR: Vérifiez vos adresses email dans le fichier Excel à la ligne" + i);
+                            //e.target.value = "";
+                            XL_file = false;
+                            adress_erron.push(vide);
+                            nb_error++;
                         } else {
                             console.log("pas d'erreur");
                             ValidateEmail(wb.Sheets[sheetName]['A' + i]['v'])
                             if (mailOK) {
                                 duplic.push(mail_valide)
-                                XL_file = true;
+
 
                             } else {
                                 console.log("mail error")
-                                $("#form_dest").val("ERREUR: Vérifiez vos adresses email dans le fichier Excel à la ligne: " + i)
-                                e.target.value = "";
-                                console.log(e.target.value)
+                                //$("#form_dest").val("ERREUR: Vérifiez vos adresses email dans le fichier Excel à la ligne: " + i)
+                                //e.target.value = "";
+                                adress_erron.push(wb.Sheets[sheetName]['A' + i]);
                                 XL_file = false;
-                                break;
+                                nb_error++;
                             };
                         }
                         console.log("etat=" + XL_file)
 
 
                         if (i === len) {
-                            if (XL_file) {
-                                $("#form_dest").val(uniq(duplic))
-                                e.target.value = "";
-                                break;
-                            }
+
+                            console.log("fin");
+                            //alert(nb_error + " erreurs ont été corrigées, votre email est prêt à l'envoi.")
+                            $("#form_dest").val(uniq(duplic))
+                            //e.target.value = "";
+                            break;
+
 
                         }
 
@@ -186,84 +398,112 @@
             };
         }
         $(".space-top").click(function() {
-            console.log("ok");
+            if ($("#form_dest").val() == "") {
+                $("#form_dest").addClass("error");
+                $("#champs2").show();
+            }
+            if ($("#form_email").val() == "") {
+                $("#form_email").addClass("error");
+                $("#champs1").show();
+            }
             if ($("#form_dest").val() != "" && $("#form_email").val() != "") {
-                var json = JSON.parse(store.get('myCookie'));
-                var perso = json.personel;
-                var mesvoeux=new String();
-                if (perso) {
-                    mesvoeux=json.message.replace(/\r?\n/g, '<br />');
-                } else {
-                    if (json.message.indexOf(",")) {
-                        var monindex2 = json.message.indexOf(",");
-
-                    }
-                    if (json.message.indexOf(".")) {
-                        var monindex = json.message.indexOf(".");
-                    }
-                    if (json.message.indexOf(":")) {
-                        var monindex3 = json.message.indexOf(":");
-                    }
-
-                    var monlength = json.message.length;
-
-                    console.log(monindex + " " + monindex2 + " " + monindex3)
-                    if (monindex == -1 && monindex2 == -1) {
-                        var string1 = json.message.substring(0, monindex3 + 1);
-                        var string2 = json.message.substring(monindex3 + 2, monlength);
-                        mesvoeux == string1 + "<br>" + string2;
-                    }
-                    if (monindex3 == -1) {
-                        var string1 = json.message.substring(0, monindex + 1);
-                        var string2 = json.message.substring(monindex + 2, monindex2 + 1);
-                        var string3 = json.message.substring(monindex2 + 2, monlength);
-                        mesvoeux = string1 + "<br>" + string2 + "<br>" + string3;
-                    }
-                    if (monindex3 < monindex2 && monindex3 > 0) {
-                        var string1 = json.message.substring(0, monindex + 1);
-                        var string2 = json.message.substring(monindex + 2, monindex3 + 1);
-                        var string3 = json.message.substring(monindex3 + 2, monlength);
-                        mesvoeux = string1 + "<br>" + string2 + "<br>" + string3;
-
-                    }
+                ValidateEmails();
+                ValidateEmails2();
+                if (!valid_email) {
+                    $("#form_dest").addClass("error");
+                    $("#champs2").show();
                 }
-                var str_json = JSON.stringify({
-                    form_email: $("#form_email").val(),
-                    form_dest: $("#form_dest").val(),
-                    titre: json.titre,
-                    message: mesvoeux,
-                    auteur: json.auteur
-                });
+                if (!valid_email2) {
+                    $("#form_email").addClass("error");
+                    $("#champs1").show();
+                }
+                if (valid_email && valid_email2) {
+                    var cookies_perso = store.get('myCookie');
+                    console.log(cookies_perso);
+                    var json = JSON.parse(cookies_perso);
+                    var perso = json.personel;
+                    var mesvoeux = new String();
+                    if (perso) {
+                        mesvoeux = json.message.replace(/\r?\n/g, '<br />');
+                    } else {
+                        if (json.message.indexOf(",")) {
+                            var monindex2 = json.message.indexOf(",");
 
-                console.log(str_json)
-                var http = new XMLHttpRequest();
-                var url = "sengrid.php";
-                var formData = new FormData();
-                formData.append("json_string", str_json);
-                http.onreadystatechange = function() { //Call a function when the state changes.
-                    if (http.readyState == 4 && http.status == 200) {
-                        console.log(http.responseText);
-                        $("body").append('<div id="envoi" class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: flex;    justify-content: center;    align-items: center;"><div class="fancybox-wrap fancybox-desktop fancybox-type-inline fancybox-opened" tabindex="-1" style="width: 420px; height: auto;  opacity: 1; overflow: visible;"><div class="fancybox-skin" style="padding: 30px; width: auto; height: auto;"><div class="fancybox-outer"><div class="fancybox-inner" style="overflow: auto; width: 360px; height: 160px;"><div id="help" style="display: block;"><h3><span>Merci</span></h3><p>Votre email est envoyé.</p></div></div></div><a title="Close" id="merci" class="fancybox-item fancybox-close" href="javascript:;">Fermer</a></div></div></div>');
-                        $("#merci").click(function() {
-                            $("#envoi").remove();
-                        })
-                        var http2 = new XMLHttpRequest();
-                        var url2 = "success.php";
-                        var formData2 = new FormData();
-                        formData2.append("json_string", str_json);
-                        http2.onreadystatechange = function() { //Call a function when the state changes.
-                            if (http2.readyState == 4 && http2.status == 200) {
-                                console.log(http2.responseText);
-                            }
                         }
-                        console.log(http2)
-                        http2.open("POST", url2, true);
-                        http2.send(formData2);
+                        if (json.message.indexOf(".")) {
+                            var monindex = json.message.indexOf(".");
+                        }
+                        if (json.message.indexOf(":")) {
+                            var monindex3 = json.message.indexOf(":");
+                        }
 
+                        var monlength = json.message.length;
+
+                        console.log(monindex + " " + monindex2 + " " + monindex3)
+                        if (monindex == -1 && monindex2 == -1) {
+                            var string1 = json.message.substring(0, monindex3 + 1);
+                            var string2 = json.message.substring(monindex3 + 2, monlength);
+                            mesvoeux == string1 + "<br>" + string2;
+                        }
+                        if (monindex3 == -1) {
+                            var string1 = json.message.substring(0, monindex + 1);
+                            var string2 = json.message.substring(monindex + 2, monindex2 + 1);
+                            var string3 = json.message.substring(monindex2 + 2, monlength);
+                            mesvoeux = string1 + "<br>" + string2 + "<br>" + string3;
+                        }
+                        if (monindex3 < monindex2 && monindex3 > 0) {
+                            var string1 = json.message.substring(0, monindex + 1);
+                            var string2 = json.message.substring(monindex + 2, monindex3 + 1);
+                            var string3 = json.message.substring(monindex3 + 2, monlength);
+                            mesvoeux = string1 + "<br>" + string2 + "<br>" + string3;
+
+                        }
                     }
+                    var str_json = JSON.stringify({
+                        form_email: $("#form_email").val(),
+                        form_dest: $("#form_dest").val(),
+                        titre: json.titre,
+                        message: mesvoeux,
+                        auteur: json.auteur
+                    });
+
+                    console.log(str_json)
+                    var http = new XMLHttpRequest();
+                    var url = "sengrid.php";
+                    var formData = new FormData();
+                    formData.append("json_string", str_json);
+                    http.onreadystatechange = function() { //Call a function when the state changes.
+                        if (http.readyState == 4 && http.status == 200) {
+                            console.log($("#envoi"));
+                            if (!XL_file) {
+                                $("#envoi").show();
+                            } else {
+                                $("#envoi2").show();
+                            }
+                            $("#merci").click(function() {
+                                $("#envoi").remove();
+
+                            })
+                            var http2 = new XMLHttpRequest();
+                            var url2 = "success.php";
+                            var formData2 = new FormData();
+                            formData2.append("json_string", str_json);
+                            http2.onreadystatechange = function() { //Call a function when the state changes.
+                                if (http2.readyState == 4 && http2.status == 200) {
+                                    console.log(http2.responseText);
+                                }
+                            }
+                            console.log(http2)
+                            http2.open("POST", url2, true);
+                            http2.send(formData2);
+
+                        }
+                    }
+                    http.open("POST", url, true);
+                    http.send(formData);
+                } else {
+                    console.log("error envoi");
                 }
-                http.open("POST", url, true);
-                http.send(formData);
             }
         })
 

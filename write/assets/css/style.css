@@ -57,7 +57,7 @@ li,
 fieldset,
 input {
     margin: 0;
-    margin-top: 25px;
+    
     padding: 0;
     line-height: 1;
     text-align: left;
@@ -626,9 +626,9 @@ form .file {
     border: none;
     cursor: pointer;
     margin-right: 20px;
-    padding: 0 20px;
+    
     width: 189px;
-    height: 57px;
+    
     background-color: #c5a45f;
 }
 
