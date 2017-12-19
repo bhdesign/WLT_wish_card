@@ -36,8 +36,7 @@ foreach (explode(',', $obj['form_dest']) as $recipient) {
     $personalization->addTo(new SendGrid\Email(null, $recipient));
     $mail->addPersonalization($personalization);
 }
-//$apiKeyCE = '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';
-//$apiKeyIntern = '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';
+
 
 
 //$apiKey = getenv(SENDGRIDAPIKEY_intern);
