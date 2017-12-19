@@ -14,8 +14,8 @@ $subject = $obj['titre'];
 $personalization = array();
 $pieces = explode(",", $obj['form_dest']);
 $recp_cnt = count($pieces);
-$apiKeyCE = getenv(DOMAIN2_SENDGRIDAPIKEY);
-$apiKeyIntern = getenv(DOMAIN1_SENDGRIDAPIKEY);
+$apiKeyCE = getenv('DOMAIN2_SENDGRIDAPIKEY');
+$apiKeyIntern = getenv('DOMAIN1_SENDGRIDAPIKEY');
 
 if ($_SERVER['SERVER_NAME'] == "2018.voeux.toyota.fr") {
     $apiKey=$apiKeyIntern;

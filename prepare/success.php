@@ -12,8 +12,8 @@ require("sendgrid-php/sendgrid-php.php");
 $from = new SendGrid\Email($obj['auteur'], $obj['form_email']);
 $subject ="Votre carte de voeux a bien été envoyée !";
 $to=new SendGrid\Email($obj['auteur'], $obj['form_email']);
-$apiKeyCE = getenv(DOMAIN2_SENDGRIDAPIKEY);
-$apiKeyIntern = getenv(DOMAIN1_SENDGRIDAPIKEY);
+$apiKeyCE = getenv('DOMAIN2_SENDGRIDAPIKEY');
+$apiKeyIntern = getenv('DOMAIN1_SENDGRIDAPIKEY');
 if ($_SERVER['SERVER_NAME'] == "2018.voeux.toyota.fr") {
     $apiKey=$apiKeyIntern;
     $monURL='http://2018.voeux.toyota.fr/';
