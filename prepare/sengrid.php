@@ -20,8 +20,10 @@ $apiKeyIntern = getenv('DOMAIN1_SENDGRIDAPIKEY');
 if ($_SERVER['SERVER_NAME'] == "2018.voeux.toyota.fr") {
     $apiKey=$apiKeyIntern;
     $monURL='http://2018.voeux.toyota.fr/';
+    $mail->addCategory("Intern");
 }else{
     $apiKey=$apiKeyCE;
+    $mail->addCategory("Concessionaires");
     $monURL='http://2018.voeux.ce.toyota.fr/';
 }
 $content = new SendGrid\Content("text/plain", $obj['message']." ".$obj['auteur']);

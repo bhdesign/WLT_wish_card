@@ -16,9 +16,11 @@ $apiKeyCE = getenv('DOMAIN2_SENDGRIDAPIKEY');
 $apiKeyIntern = getenv('DOMAIN1_SENDGRIDAPIKEY');
 if ($_SERVER['SERVER_NAME'] == "2018.voeux.toyota.fr") {
     $apiKey=$apiKeyIntern;
+     $mail->addCategory("Intern");
     $monURL='http://2018.voeux.toyota.fr/';
-}else{
+   }else{
     $apiKey=$apiKeyCE;
+    $mail->addCategory("Concessionaires");
     $monURL='http://2018.voeux.ce.toyota.fr/';
 }
 $content = new SendGrid\Content("text/plain", "Votre carte de voeux a bien été envoyée à votre destinataire ! Votre message personnalisé: ".$obj['message'].", ".$obj['auteur']);
