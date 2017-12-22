@@ -17,16 +17,16 @@ $mail->setFrom($from);
 $mail->setSubject($subject);
 $apiKeyCE = getenv('DOMAIN2_SENDGRIDAPIKEY');
 $apiKeyIntern = getenv('DOMAIN1_SENDGRIDAPIKEY');
-if ($_SERVER['SERVER_NAME'] == "2018.voeux.toyota.fr") {
-    $apiKey=$apiKeyIntern;
-     $mail->addCategory("Intern");
-    $monURL='http://2018.voeux.toyota.fr/preview/emailing.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
-    $monURL2='http://2018.voeux.toyota.fr/';
-   }else{
-    $apiKey=$apiKeyCE;
-    $mail->addCategory("Concessionaires");
-     $monURL='http://2018.voeux.ce.toyota.fr/preview/emailing.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
+if (strpos($_SERVER['HTTP_HOST'], ".ce.") !== false){
+$apiKey=$apiKeyCE;
     $monURL2='http://2018.voeux.ce.toyota.fr/';
+    $monURL='http://2018.voeux.ce.toyota.fr/preview/emailing.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
+    $mail->addCategory("Concessionaires");
+}else{
+     $apiKey=$apiKeyIntern;
+    $monURL2='http://2018.voeux.toyota.fr/';
+     $monURL='http://2018.voeux.toyota.fr/preview/emailing.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
+    $mail->addCategory("Intern");
 }
 $personalization = new SendGrid\Personalization();
 $personalization->addTo(new SendGrid\Email(null, $obj['form_dest']));
