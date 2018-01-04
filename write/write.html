@@ -12,20 +12,7 @@
     <meta name="description" content="" />
     <meta name="keywords" content="" />
 
-    <script type="text/javascript">
-        /*
-                                                                                                                                                                                                		var _gaq = _gaq || [];
-                                                                                                                                                                                                		_gaq.push(['_setAccount', 'UA-37104851-1']);
-                                                                                                                                                                                                		_gaq.push(['_trackPageview']);
-
-                                                                                                                                                                                                		(function() {
-                                                                                                                                                                                                			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                                                                                                                                                                                                			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                                                                                                                                                                                                			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                                                                                                                                                                                                		})();
-                                                                                                                                                                                                		*/
-
-    </script>
+    
 
     <link rel="stylesheet" media="all" type="text/css" href="./assets/css/style.css" />
     <link rel="stylesheet" type="text/css" href="./assets/css/jquery.fancybox.css" media="screen" />
@@ -123,16 +110,18 @@
         $('#form_message').focus(function() {
             perso = true;
         });
-        if (localStorage.getItem("myCookie") === null) {
+        if (localStorage.getItem("2018voeux") === null) {
             console.log("vide")
 
         } else {
-            var json = JSON.parse(store.get('myCookie'));
+            var json = JSON.parse(store.get('2018voeux'));
             perso = json.personel;
             $('#form_title')[0].value = json.titre;
             $('#form_message')[0].value = json.message.split("<br/>").join("\n");
             $('#form_name')[0].value = json.nom;
             $('#form_author')[0].value = json.auteur;
+            store.clear();
+            console.log(store.get('2018voeux'))
         }
         $("#myform").submit(function(e) {
             return false;
@@ -157,7 +146,7 @@
                 var titre = $('#form_title')[0].value;
                 var monmessage = messageTextArea;
                 var auteur = $('#form_author')[0].value;
-                store.set("myCookie", JSON.stringify({
+                store.set("2018voeux", JSON.stringify({
                     nom: prenom,
                     titre: titre,
                     message: monmessage,
@@ -198,11 +187,12 @@
                 var monmessage = messageTextArea;
                 var auteur = $('#form_author')[0].value;
 
-                store.set("myCookie", JSON.stringify({
+                store.set("2018voeux", JSON.stringify({
                     nom: prenom,
                     titre: titre,
                     message: monmessage,
-                    auteur: auteur
+                    auteur: auteur,
+                    personel: perso
                 }));
                 setTimeout(function() {
                     window.location.href = "../prepare/prepare.html"

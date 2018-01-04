@@ -20,12 +20,12 @@ $apiKeyIntern = getenv('DOMAIN1_SENDGRIDAPIKEY');
 if (strpos($_SERVER['HTTP_HOST'], ".ce.") !== false){
 $apiKey=$apiKeyCE;
     $monURL2='http://2018.voeux.ce.toyota.fr/';
-    $monURL='http://2018.voeux.ce.toyota.fr/preview/emailing.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
+    $monURL='http://2018.voeux.ce.toyota.fr/preview/emailing_success.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
     $mail->addCategory("Concessionaires");
 }else{
      $apiKey=$apiKeyIntern;
     $monURL2='http://2018.voeux.toyota.fr/';
-     $monURL='http://2018.voeux.toyota.fr/preview/emailing.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
+     $monURL='http://2018.voeux.toyota.fr/preview/emailing_success.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
     $mail->addCategory("Intern");
 }
 $personalization = new SendGrid\Personalization();
