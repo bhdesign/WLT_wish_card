@@ -3,7 +3,7 @@ $json=$_POST['json_string'];
 $obj=json_decode($json, true);
 require("sendgrid-php/sendgrid-php.php");
 $from = new SendGrid\Email('Toyota','voeux@bh-design.fr');
-$subject = $obj['titre'];
+$subject = "Une année 2018 PLEINE d'énergie !"
 $personalization = array();
 $pieces = explode(",", $obj['form_dest']);
 $recp_cnt = count($pieces);
