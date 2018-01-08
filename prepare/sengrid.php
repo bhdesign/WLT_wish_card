@@ -3,14 +3,16 @@ $json=$_POST['json_string'];
 $obj=json_decode($json, true);
 require("sendgrid-php/sendgrid-php.php");
 $from = new SendGrid\Email('Toyota','voeux@bh-design.fr');
-$subject = "Une année 2018 PLEINE d'énergie !"
+$subject = ":) Une année 2018 PLEINE d'énergie !";
 $personalization = array();
 $pieces = explode(",", $obj['form_dest']);
 $recp_cnt = count($pieces);
+print_r($from);
 $mail = new SendGrid\Mail();
 $mail->setFrom($from);
 $mail->setSubject($subject);
     //$mail->setReplyTo(new SendGrid\Email(null, $CDASH_EMAIL_REPLY));
+echo $_SERVER['HTTP_HOST'];
 $apiKeyCE = getenv('DOMAIN2_SENDGRIDAPIKEY');
 $apiKeyIntern = getenv('DOMAIN1_SENDGRIDAPIKEY');
 if (strpos($_SERVER['HTTP_HOST'], ".ce.") !== false){
@@ -24,7 +26,6 @@ $apiKey=$apiKeyCE;
      $monURL='http://2018.voeux.toyota.fr/preview/emailing.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
     $mail->addCategory("Intern");
 }
-
 foreach (explode(',', $obj['form_dest']) as $recipient) {
     $personalization = new SendGrid\Personalization();
     $personalization->addTo(new SendGrid\Email(null, $recipient));
@@ -40,3 +41,4 @@ echo $response->statusCode();
 print_r($response->headers());
 echo $response->body();
 ?>
+

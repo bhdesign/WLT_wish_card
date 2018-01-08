@@ -3,7 +3,7 @@ $json=$_POST['json_string'];
 $obj=json_decode($json, true);
 require("sendgrid-php/sendgrid-php.php");
 $from = new SendGrid\Email('Toyota','voeux@bh-design.fr');
-$subject ="Votre carte de voeux a bien été envoyée !";
+$subject =":) Votre carte de voeux a bien été envoyée !";
 $to=new SendGrid\Email($obj['auteur'], $obj['form_email']);
 $mail = new SendGrid\Mail();
 $mail->setFrom($from);
@@ -12,13 +12,13 @@ $apiKeyCE = getenv('DOMAIN2_SENDGRIDAPIKEY');
 $apiKeyIntern = getenv('DOMAIN1_SENDGRIDAPIKEY');
 if (strpos($_SERVER['HTTP_HOST'], ".ce.") !== false){
 $apiKey=$apiKeyCE;
-    $monURL2='http://2018.voeux.ce.toyota.fr/';
-    $monURL='http://2018.voeux.ce.toyota.fr/preview/emailing_success.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
+    $monURL2='http://2018.voeux.toyota.fr/';
+    $monURL='http://2018.voeux.toyota.fr/preview/emailing_success.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
     $mail->addCategory("Concessionaires");
 }else{
      $apiKey=$apiKeyIntern;
-    $monURL2='http://2018.voeux.toyota.fr/';
-     $monURL='http://2018.voeux.toyota.fr/preview/emailing_success.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
+    $monURL2='http://2018.voeux.ce.toyota.fr/';
+     $monURL='http://2018.voeux.ce.toyota.fr/preview/emailing_success.html?param1='.urlencode($obj['message']).'&param2='.$obj['auteur'];
     $mail->addCategory("Intern");
 }
 $personalization = new SendGrid\Personalization();
