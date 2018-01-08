@@ -424,10 +424,11 @@
                     $("#champs1").show();
                 }
                 if (valid_email && valid_email2) {
-                    var cookies_perso = store.get('myCookie');
+                    var cookies_perso = store.get('2018voeux');
                     console.log(cookies_perso);
                     var json = JSON.parse(cookies_perso);
                     var perso = json.personel;
+                  console.log(perso);
                     var mesvoeux = new String();
                     if (perso) {
                         mesvoeux = json.message.replace(/\r?\n/g, '<br />');
