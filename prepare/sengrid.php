@@ -12,8 +12,8 @@ require("sendgrid-php/sendgrid-php.php");
 $from = new SendGrid\Email($obj['auteur'], $obj['form_email']);
 $subject = $obj['titre'];
 $personalization = array();
-$pieces = explode(",", $obj['form_dest']);
-$recp_cnt = count($pieces);
+//$pieces = explode(",", $obj['form_dest']);
+$recp_cnt = count($obj['form_dest']);
 $mail = new SendGrid\Mail();
 $mail->setFrom($from);
 $mail->setSubject($subject);
@@ -32,7 +32,7 @@ $apiKey=$apiKeyCE;
     $mail->addCategory("Intern");
 }
 
-foreach (explode(',', $obj['form_dest']) as $recipient) {
+foreach ($obj['form_dest'] as $recipient) {
     $personalization = new SendGrid\Personalization();
     $personalization->addTo(new SendGrid\Email(null, $recipient));
     $mail->addPersonalization($personalization);
