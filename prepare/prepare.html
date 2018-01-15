@@ -582,6 +582,13 @@
               message: mesvoeux,
               auteur: json.auteur
             });
+            var str_json2 = JSON.stringify({
+              form_email: $("#form_email").val(),
+              form_dest: $("#form_dest").val(),
+              titre: json.titre,
+              message: mesvoeux,
+              auteur: json.auteur
+            });
             var httpFinal = new XMLHttpRequest();
             var urlFinal = "sengrid.php";
             var formDataFinal = new FormData();
@@ -604,7 +611,7 @@
                 var http2 = new XMLHttpRequest();
                 var url2 = "success.php";
                 var formData2 = new FormData();
-                formData2.append("json_string", str_json);
+                formData2.append("json_string", str_json2);
                 http2.onreadystatechange = function() { //Call a function when the state changes.
                   if (http2.readyState == 4 && http2.status == 200) {
                     console.log(http2.responseText);
