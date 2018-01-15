@@ -339,6 +339,7 @@
           return nArr;
         };
       };
+     
       return a.unique();
     }
 
@@ -377,7 +378,7 @@
               adress_erron.push(vide);
               nb_error++;
             } else {
-              console.log("pas d'erreur");
+              console.log(wb.Sheets[sheetName]['A' + i]['v']);
               ValidateEmail(wb.Sheets[sheetName]['A' + i]['v'])
               if (mailOK) {
                 duplic.push(mail_valide)
@@ -397,7 +398,7 @@
 
             if (i === len) {
 
-              console.log("fin");
+              console.log(duplic);
               //alert(nb_error + " erreurs ont été corrigées, votre email est prêt à l'envoi.")
               $("#form_dest").val(uniq(duplic))
               //e.target.value = "";
@@ -430,7 +431,7 @@
       };
     }
     $(".space-top").click(function() {
-      document.getElementById('loader_overlay').style.display = "block";
+      
       if ($("#form_dest").val() == "") {
         $("#form_dest").addClass("error");
         $("#champs2").show();
@@ -451,6 +452,7 @@
           $("#champs1").show();
         }
         if (valid_email && valid_email2) {
+          document.getElementById('loader_overlay').style.display = "block";
           var cookies_perso = store.get('2018voeux');
           console.log(cookies_perso);
           var json = JSON.parse(cookies_perso);
