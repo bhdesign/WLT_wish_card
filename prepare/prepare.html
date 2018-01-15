@@ -48,32 +48,31 @@
 </head>
 
 <body>
- <div id="loader_overlay">
-        <div id="loader">
-            <div class="f_circleG" id="frotateG_01"></div>
-            <div class="f_circleG" id="frotateG_02"></div>
-            <div class="f_circleG" id="frotateG_03"></div>
-            <div class="f_circleG" id="frotateG_04"></div>
-            <div class="f_circleG" id="frotateG_05"></div>
-            <div class="f_circleG" id="frotateG_06"></div>
-            <div class="f_circleG" id="frotateG_07"></div>
-            <div class="f_circleG" id="frotateG_08"></div>
-        </div>
+  <div id="loader_overlay">
+    <div id="loader">
+      <div class="f_circleG" id="frotateG_01"></div>
+      <div class="f_circleG" id="frotateG_02"></div>
+      <div class="f_circleG" id="frotateG_03"></div>
+      <div class="f_circleG" id="frotateG_04"></div>
+      <div class="f_circleG" id="frotateG_05"></div>
+      <div class="f_circleG" id="frotateG_06"></div>
+      <div class="f_circleG" id="frotateG_07"></div>
+      <div class="f_circleG" id="frotateG_08"></div>
     </div>
-    <script>
+  </div>
+  <script>
+    var h = window.innerHeight;
+    var w = window.innerWidth;
 
-        var h = window.innerHeight;
-        var w = window.innerWidth;
+    var overlay = document.getElementById('loader_overlay');
+    overlay.style.width = w;
+    overlay.style.height = h + 'px';
 
-        var overlay = document.getElementById('loader_overlay');
-        overlay.style.width = w;
-        overlay.style.height = h + 'px';
+    var loader = document.getElementById('loader');
+    loader.style.top = (((h - 150) / 2) - 150) + 'px';
+    loader.style.left = ((w - 150) / 2) + 'px';
 
-        var loader = document.getElementById('loader');
-        loader.style.top = (((h - 150) / 2) - 150) + 'px';
-        loader.style.left = ((w - 150) / 2) + 'px';
-
-    </script>
+  </script>
   <div id="wrapper">
     <header id="header">
       <h1><img src="assets/img/logo.png" alt="Toyota" /></h1>
@@ -498,7 +497,7 @@
           var limiteEnvoi = mesenvois.length;
           var LoopLimit = limiteEnvoi / 1000;
           var step = 0;
-          if (mesenvois.length > 1000) {
+          if (mesenvois.length > 999) {
             for (var j = 1; j <= LoopLimit.toString().substr(0, 1); j++) {
               marequest(j)
             };
@@ -508,7 +507,7 @@
                 var newstep = (i * 1000) - 1;
                 console.log(newstep);
                 var mesNenvois = mesenvois.slice(step, newstep);
-                step = newstep+1;
+                step = newstep + 1;
                 var str_json = JSON.stringify({
                   form_email: $("#form_email").val(),
                   form_dest: mesNenvois,
@@ -535,12 +534,12 @@
                   var httpFinal = new XMLHttpRequest();
                   var urlFinal = "sengrid.php";
                   var formDataFinal = new FormData();
-                   formDataFinal.append("json_string", str_json);
+                  formDataFinal.append("json_string", str_json);
                   httpFinal.open("POST", urlFinal, true);
                   httpFinal.send(formDataFinal);
                   httpFinal.onreadystatechange = function() { //Call a function when the state changes.
                     if (httpFinal.readyState == 4 && httpFinal.status == 200) {
-                       document.getElementById('loader_overlay').style.display = "none";
+                      document.getElementById('loader_overlay').style.display = "none";
                       console.log($("#envoi"));
                       if (!XL_file) {
                         $("#envoi").show();
@@ -573,48 +572,48 @@
             }
 
 
-          }else{
+          } else {
             var str_json = JSON.stringify({
-                  form_email: $("#form_email").val(),
-                  form_dest:$("#form_dest").val(),
-                  titre: json.titre,
-                  message: mesvoeux,
-                  auteur: json.auteur
-                });
-           var httpFinal = new XMLHttpRequest();
-                  var urlFinal = "sengrid.php";
-                  var formDataFinal = new FormData();
-                   formDataFinal.append("json_string", str_json);
-                  httpFinal.open("POST", urlFinal, true);
-                  httpFinal.send(formDataFinal);
-                  httpFinal.onreadystatechange = function() { //Call a function when the state changes.
-                    if (httpFinal.readyState == 4 && httpFinal.status == 200) {
-                       document.getElementById('loader_overlay').style.display = "none";
-                      console.log($("#envoi"));
-                      if (!XL_file) {
-                        $("#envoi").show();
-                      } else {
-                        $("#envoi2").show();
-                      }
-                      $("#merci").click(function() {
-                        $("#envoi").remove();
+              form_email: $("#form_email").val(),
+              form_dest: $("#form_dest").val(),
+              titre: json.titre,
+              message: mesvoeux,
+              auteur: json.auteur
+            });
+            var httpFinal = new XMLHttpRequest();
+            var urlFinal = "sengrid.php";
+            var formDataFinal = new FormData();
+            formDataFinal.append("json_string", str_json);
+            httpFinal.open("POST", urlFinal, true);
+            httpFinal.send(formDataFinal);
+            httpFinal.onreadystatechange = function() { //Call a function when the state changes.
+              if (httpFinal.readyState == 4 && httpFinal.status == 200) {
+                document.getElementById('loader_overlay').style.display = "none";
+                console.log($("#envoi"));
+                if (!XL_file) {
+                  $("#envoi").show();
+                } else {
+                  $("#envoi2").show();
+                }
+                $("#merci").click(function() {
+                  $("#envoi").remove();
 
-                      })
-                      var http2 = new XMLHttpRequest();
-                      var url2 = "success.php";
-                      var formData2 = new FormData();
-                      formData2.append("json_string", str_json);
-                      http2.onreadystatechange = function() { //Call a function when the state changes.
-                        if (http2.readyState == 4 && http2.status == 200) {
-                          console.log(http2.responseText);
-                        }
-                      }
-                      console.log(http2)
-                      http2.open("POST", url2, true);
-                      http2.send(formData2);
-
-                    }
+                })
+                var http2 = new XMLHttpRequest();
+                var url2 = "success.php";
+                var formData2 = new FormData();
+                formData2.append("json_string", str_json);
+                http2.onreadystatechange = function() { //Call a function when the state changes.
+                  if (http2.readyState == 4 && http2.status == 200) {
+                    console.log(http2.responseText);
                   }
+                }
+                console.log(http2)
+                http2.open("POST", url2, true);
+                http2.send(formData2);
+
+              }
+            }
           }
 
 
