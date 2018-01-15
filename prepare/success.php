@@ -29,7 +29,7 @@ $apiKey=$apiKeyCE;
     $mail->addCategory("Intern");
 }
 $personalization = new SendGrid\Personalization();
-$personalization->addTo(new SendGrid\Email(null, $obj['form_dest']));
+$personalization->addTo(new SendGrid\Email(null, $obj['form_email']));
 $mail->addPersonalization($personalization);
 $contentText = new SendGrid\Content("text/plain", $obj['message']." ".$obj['auteur']);
 $mail->addContent($contentText);
